@@ -1,5 +1,6 @@
 #!/usr/bin/python3
 from argparse import Action, SUPPRESS
+from dictquery import match
 from pybots.apis.security.default_credentials import *
 from pybots.apis.security.default_credentials import __all__
 from pybots.core.utils.api import APIError
@@ -8,7 +9,7 @@ from tinyscript import *
 
 __author__    = "Alexandre D'Hondt"
 __email__     = "alexandre.dhondt@gmail.com"
-__version__   = "1.0.1"
+__version__   = "1.0.2"
 __copyright__ = ("A. D'Hondt", 2021)
 __license__   = "gpl-3.0"
 __source__    = "https://github.com/dhondta/searchpass"
@@ -18,7 +19,9 @@ It works by caching the whole lists of known default passwords downloaded from v
  including CIRTnet, DataRecovery, PasswordDB, RouterPasswd or even SaynamWeb) to perform searches locally.
 """
 __examples__  = [
-    "",
+    "--update",
+    "--passwords",
+    "--query \"username=='user'\" --passwords",
 ]
 
 
@@ -41,20 +44,9 @@ class _UpdateAction(Action):
         parser.exit()
 
 
-def get(item, key):
-    """ Dummy function to retrieve a value from the given item given the corresponding list of keys. """
-    value = None
-    for k in KEYS[key]:
-        value = item.get(k)
-        if value is not None:
-            break
-    if value is not None:
-        return value.strip()
-
-
 def load(warn=False):
     """ This loads and aggregates the records for every source of default passwords from the cached JSON files. """
-    data = {}
+    data = []
     for api_name in APIS:
         name = api_name[:-3]
         path = PATH.joinpath("%s.json" % name.lower())
@@ -62,10 +54,15 @@ def load(warn=False):
             with path.open() as f:
                 d = json.load(f)
             for vendor, lst in d.items():
-                if isinstance(lst, dict):
-                    lst = lst['data']
-                data.setdefault(vendor, [])
-                data[vendor].extend(lst)
+                for item in (lst.get('data') if isinstance(lst, dict) else lst):
+                    item['vendor'] = vendor
+                    for k in ["username", "password"]:
+                        for k2 in KEYS[k]:
+                            try:
+                                item[k] = item.pop(k2)
+                            except KeyError:
+                                pass
+                    data.append(item)
         elif warn:
             logger.warning("'%s' does not exist" % path)
     return data
@@ -93,25 +90,24 @@ def update(warn=False):
 
 if __name__ == '__main__':
     parser.register('action', 'update', _UpdateAction)
-    parser.add_argument("-e", "--empty", action="store_true", help="include empty username or password")
     fmt = parser.add_mutually_exclusive_group()
+    fmt.add_argument("-e", "--empty", action="store_true", help="include empty username or password")
     fmt.add_argument("--passwords", action="store_true", help="get passwords only")
+    parser.add_argument("-q", "--query", help="search query")
     fmt.add_argument("--usernames", action="store_true", help="get usernames only")
-    parser.add_argument("--vendor", help="vendor pattern to be searched")
     extra = parser.get_argument_group("extra arguments")
     extra.add_argument("--update", action="update", help="update passwords databases")
     initialize()
     data, creds = load(), {}
-    for vendor, lst in data.items():
-        if re.search(args.vendor, vendor):
-            for item in lst:
-                user, pswd = get(item, "username"), get(item, "password")
-                if user is None or pswd is None:
-                    continue
-                if not args.empty and (user == "" or pswd == ""):
-                    continue
-                creds.setdefault(user, [])
-                creds[user].append(pswd)
+    for item in data:
+        if args.query is None or match(item, args.query):
+            user, pswd = item.get('username'), item.get('password')
+            if user is None or pswd is None:
+                continue
+            if not args.empty and (user == "" or pswd == ""):
+                continue
+            creds.setdefault(user, [])
+            creds[user].append(pswd)
     if args.usernames:
         for u in sorted(set(creds.keys())):
             print(u)
