@@ -9,7 +9,7 @@ from tinyscript import *
 
 __author__    = "Alexandre D'Hondt"
 __email__     = "alexandre.dhondt@gmail.com"
-__version__   = "1.0.2"
+__version__   = "1.0.3"
 __copyright__ = ("A. D'Hondt", 2021)
 __license__   = "gpl-3.0"
 __source__    = "https://github.com/dhondta/searchpass"
@@ -95,7 +95,7 @@ if __name__ == '__main__':
     fmt.add_argument("--passwords", action="store_true", help="get passwords only")
     parser.add_argument("-q", "--query", help="search query")
     fmt.add_argument("--usernames", action="store_true", help="get usernames only")
-    extra = parser.get_argument_group("extra arguments")
+    extra = parser.add_argument_group("extra arguments")
     extra.add_argument("--update", action="update", help="update passwords databases")
     initialize()
     data, creds = load(), {}
