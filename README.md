@@ -3,7 +3,7 @@
 
 [![PyPi](https://img.shields.io/pypi/v/searchpass.svg)](https://pypi.python.org/pypi/searchpass/)
 [![Python Versions](https://img.shields.io/pypi/pyversions/searchpass.svg)](https://pypi.python.org/pypi/searchpass/)
-[![Requirements Status](https://requires.io/github/dhondta/searchpass/requirements/?branch=master)](https://requires.io/github/dhondta/searchpass/requirements/?branch=master)
+[![Build Status](https://github.com/dhondta/searchpass/actions/workflows/python-package.yml/badge.svg)](https://github.com/dhondta/searchpass/actions/workflows/python-package.yml)
 [![Known Vulnerabilities](https://snyk.io/test/github/dhondta/searchpass/badge.svg?targetFile=requirements.txt)](https://snyk.io/test/github/dhondta/searchpass?targetFile=requirements.txt)
 [![License](https://img.shields.io/pypi/l/searchpass.svg)](https://pypi.python.org/pypi/searchpass/)
 
@@ -11,7 +11,7 @@ This tool is similar to the Ruby implementation [SearchPass](https://github.com/
 
 It relies on [`pybots`](https://github.com/dhondta/pybots) for abstracting robots that download from the sources of default credentials and on [`dictquery`](https://github.com/cyberlis/dictquery) for querying the underlying data using the `--query` option.
 
-```sh
+```session
 $ pip install searchpass
 [...]
 

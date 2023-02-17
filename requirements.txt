@@ -1,3 +1,4 @@
 dictquery
 pybots>=2.1.1
+setuptools>=67.3.2
 tinyscript>=1.26.1
