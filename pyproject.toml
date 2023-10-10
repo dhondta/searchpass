@@ -3,7 +3,7 @@ requires = ["setuptools>=66.0", "setuptools-scm"]
 build-backend = "setuptools.build_meta"
 
 [tool.setuptools.dynamic]
-version = {attr = "searchpass.__version__"}
+version = {attr = "searchpass.__main__.__version__"}
 
 [tool.setuptools.packages.find]
 where = ["src"]
@@ -16,7 +16,7 @@ authors = [
 description = "Default passwords search tool supporting many open source databases"
 license = {file = "LICENSE"}
 keywords = ["default-passwords", "search-tool"]
-requires-python = ">=3.7,<4"
+requires-python = ">=3.8,<4"
 classifiers = [
   "Development Status :: 5 - Production/Stable",
   "Environment :: Console",
@@ -25,7 +25,6 @@ classifiers = [
   "Intended Audience :: Other Audience",
   "License :: OSI Approved :: GNU General Public License v3 or later (GPLv3+)",
   "Programming Language :: Python :: 3",
-  "Programming Language :: Python :: 3.7",
   "Programming Language :: Python :: 3.8",
   "Programming Language :: Python :: 3.9",
   "Programming Language :: Python :: 3.10",
@@ -35,7 +34,7 @@ classifiers = [
 ]
 dependencies = [
   "dictquery",
-  "pybots>=2.1.1",
+  "pybots>=2.1.3",
   "setuptools>=67.3.2",
   "tinyscript>=1.28.6",
 ]
@@ -51,4 +50,4 @@ issues = "https://github.com/dhondta/searchpass/issues"
 repository = "https://github.com/dhondta/searchpass"
 
 [project.scripts]
-searchpass = "searchpass"
+searchpass = "searchpass.__main__:main"
