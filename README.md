@@ -9,37 +9,54 @@
 
 This tool is similar to the Ruby implementation [SearchPass](https://github.com/michenriksen/searchpass) *for offline searching of default credentials for network devices, web applications and more*. The present tool expands its capabilities to **more databases of credentials** and allows to **update the local database**, a bit like [SearchSploit](https://www.exploit-db.com/searchsploit) allows to update references to exploits on your local machine.
 
-It relies on [`pybots`](https://github.com/dhondta/pybots) for abstracting robots that download from the sources of default credentials and on [`dictquery`](https://github.com/cyberlis/dictquery) for querying the underlying data using the `--query` option.
+It relies on :
+- [`tinyscript`](https://github.com/dhondta/python-tinyscript), for the CLI tool mechanics
+- [`pybots`](https://github.com/dhondta/python-pybots) for abstracting robots that download from the sources of default credentials
+- [`sqlite3`](https://docs.python.org/3/library/sqlite3.html) for querying the underlying data using the `--query` option
+
+Data from the different sources gets normalized into a SQLite DB when updating the tool. [`searchpass´](https://github.com/dhondta/searchpass) package embeds a database updated end 2024.
 
 ```session
 $ pip install searchpass
 [...]
 
 $ searchpass --help
-[...]
+searchpass 2.0.0
+Author   : Alexandre D'Hondt (alexandre.dhondt@gmail.com)
+Copyright: © 2021-2024 A. D'Hondt
+License  : GPLv3 (https://www.gnu.org/licenses/gpl-3.0.fr.html)
+Source   : https://github.com/dhondta/searchpass
+
 This tool aims to search for default passwords of common devices based on criteria like the vendor or the model.
 It works by caching the whole lists of known default passwords downloaded from various sources (relying on pybots ;
  including CIRTnet, DataRecovery, PasswordDB, RouterPasswd or even SaynamWeb) to perform searches locally.
 
-usage: searchpass [-e] [--passwords] [-q QUERY] [--usernames] [--update] [-h] [--help] [-v]
+usage: searchpass [-e] [--passwords] [-q QUERY] [--usernames] [--reset] [--show] [--stats] [--update] [-h] [--help] [-v]
 
-optional arguments:
+search options:
   -e, --empty           include empty username or password (default: False)
   --passwords           get passwords only (default: False)
   -q QUERY, --query QUERY
                         search query (default: None)
   --usernames           get usernames only (default: False)
 
+action arguments:
+  --reset     remove cached credentials databases
+  --show      show records of credentials databases
+  --stats     get statistics on credentials databases
+  --update    update credentials databases
+
 extra arguments:
-  --update       update passwords databases
-  -h             show usage message and exit
-  --help         show this help message and exit
-  -v, --verbose  verbose mode (default: False)
+  -h               show usage message and exit
+  --help           show this help message and exit
+  -v, --verbose    verbose mode (default: False)
 
 Usage examples:
   searchpass --update
   searchpass --passwords
-  searchpass --query "username=='user'" --passwords
+  searchpass --stats
+  searchpass --query "username='user'
+  searchpass --query "username LIKE \"Admin%%\"" --passwords
 ```
 
 

@@ -1,12 +1,15 @@
 [build-system]
-requires = ["setuptools>=66.0", "setuptools-scm"]
+requires = ["setuptools>=70.0", "setuptools-scm"]
 build-backend = "setuptools.build_meta"
 
 [tool.setuptools.dynamic]
-version = {attr = "searchpass.__main__.__version__"}
+version = {attr = "searchpass.__info__.__version__"}
 
 [tool.setuptools.packages.find]
 where = ["src"]
+
+[tool.setuptools.package-data]
+"*" = ["*.json"]
 
 [project]
 name = "searchpass"
@@ -15,7 +18,8 @@ authors = [
 ]
 description = "Default passwords search tool supporting many open source databases"
 license = {file = "LICENSE"}
-keywords = ["default-passwords", "search-tool"]
+keywords = ["default-passwords", "default-credentials", "network-devices", "search-tool", "pentest-tool",
+            "cybersecurity-tool"]
 requires-python = ">=3.8,<4"
 classifiers = [
   "Development Status :: 5 - Production/Stable",
@@ -29,13 +33,16 @@ classifiers = [
   "Programming Language :: Python :: 3.9",
   "Programming Language :: Python :: 3.10",
   "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
   "Topic :: Software Development :: Libraries :: Python Modules",
   "Topic :: Security",
 ]
 dependencies = [
-  "dictquery",
   "pybots>=2.1.3",
   "tinyscript>=1.30.16",
+  "requests>=2.32.2",  # SNYK-PYTHON-REQUESTS-6928867
+  "urllib3>=1.26.19",  # SNYK-PYTHON-URLLIB3-7267250
+  "zipp>=3.19.1",      # SNYK-PYTHON-ZIPP-7430899
 ]
 dynamic = ["version"]
 
