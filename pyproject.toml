@@ -9,7 +9,7 @@ version = {attr = "searchpass.__info__.__version__"}
 where = ["src"]
 
 [tool.setuptools.package-data]
-"*" = ["*.json"]
+"*" = ["*.db"]
 
 [project]
 name = "searchpass"
@@ -38,10 +38,7 @@ classifiers = [
   "Topic :: Security",
 ]
 dependencies = [
-  "pybots>=2.1.3",
-  "tinyscript>=1.30.16",
-  "requests>=2.32.2",  # SNYK-PYTHON-REQUESTS-6928867
-  "urllib3>=1.26.19",  # SNYK-PYTHON-URLLIB3-7267250
+  "pybots>=2.1.5",
   "zipp>=3.19.1",      # SNYK-PYTHON-ZIPP-7430899
 ]
 dynamic = ["version"]
